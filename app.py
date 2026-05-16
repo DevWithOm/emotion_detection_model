@@ -339,11 +339,11 @@ class EmotionVideoProcessor(VideoProcessorBase):
                 self.last_process_time = 0
 
             self.frame_counter += 1
-            # Process at most 5 times per second (every 0.2s)
-            if now - self.last_process_time >= 0.2 or not hasattr(self, 'last_results'):
+            # Process at most ~3 times per second (every 0.3s) to reduce lag
+            if now - self.last_process_time >= 0.3 or not hasattr(self, 'last_results'):
                 self.last_process_time = now
                 # Make face detection slightly more lenient for backlit/poor lighting
-                faces = detect_faces(img, scale_factor=1.2, min_neighbors=4)
+                faces = detect_faces(img, scale_factor=1.3, min_neighbors=5)
                 num_faces = len(faces)
                 top_emotion = "None"
                 top_confidence = 0.0
@@ -470,7 +470,13 @@ with col1:
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=EmotionVideoProcessor,
             rtc_configuration={
-                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+                "iceServers": [
+                    {"urls": ["stun:stun.l.google.com:19302"]},
+                    {"urls": ["stun:stun1.l.google.com:19302"]},
+                    {"urls": ["stun:stun2.l.google.com:19302"]},
+                    {"urls": ["stun:stun3.l.google.com:19302"]},
+                    {"urls": ["stun:stun4.l.google.com:19302"]},
+                ]
             },
             media_stream_constraints={
                 "video": {
@@ -524,7 +530,7 @@ with st.sidebar:
 
     st.markdown("### 🎭 Current Emotion")
     
-    @st.fragment(run_every=1)
+    @st.fragment(run_every=2)
     def render_sidebar_metrics():
         snapshot = get_current_snapshot(webrtc_ctx)
 
@@ -607,7 +613,7 @@ with col2:
 
     chart_placeholder = st.empty()
 
-    @st.fragment(run_every=1)
+    @st.fragment(run_every=2)
     def render_emotion_chart():
         try:
             emotion_counts = get_current_history(webrtc_ctx)
