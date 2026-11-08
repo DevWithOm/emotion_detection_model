@@ -212,8 +212,6 @@ emotion-detection/
 ## 👤 Author
 
 **Om Vyas**
-- 🎓 B.Tech CSE (AI & ML), MIT Academy of Engineering, Pune
-- 🆔 PRN: 202501110101
 - 🐙 GitHub: [DevWithOm](https://github.com/DevWithOm)
 - 💼 LinkedIn: [om-vyas-546b9a3a5](https://linkedin.com/in/om-vyas-546b9a3a5)
 
